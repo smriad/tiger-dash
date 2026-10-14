@@ -12,8 +12,8 @@ SELECT bucket, sensor_id, metric,
        sample_count,
        avg_value, min_value, max_value
 FROM ghw_sensor_hourly
-WHERE bucket >= now() - make_interval(hours => $1::int)
-  AND ($2::text IS NULL OR sensor_id = $2)
+WHERE bucket >= now() - make_interval(hours => %s::int)
+  AND (%s::text IS NULL OR sensor_id = %s)
 ORDER BY bucket DESC, sensor_id, metric
 LIMIT 200
 """
@@ -34,7 +34,7 @@ class Handler(BaseHTTPRequestHandler):
             hours = int(qs.get("hours", ["24"])[0])
             sensor = qs.get("sensor", [None])[0]
             with get_conn() as conn:
-                rows = conn.execute(QUERY, (hours, sensor)).fetchall()
+                rows = conn.execute(QUERY, (hours, sensor, sensor)).fetchall()
             body = [
                 {
                     "bucket": r[0].isoformat(),

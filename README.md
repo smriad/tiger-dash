@@ -17,7 +17,7 @@ The view `ghw_sensor_hourly` rolls up readings into **1-hour buckets** with `avg
 ## Run the dashboard locally
 
 ```bash
-export DATABASE_URL="$(tiger connection-string stillbench --role tsdbadmin)"
+export DATABASE_URL="$(tiger db uri stillbench --with-password)"
 pip install -r requirements.txt
 python dashboard/server.py
 ```
