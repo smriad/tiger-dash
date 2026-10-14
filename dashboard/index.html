@@ -62,37 +62,10 @@
             <th>Max</th>
           </tr>
         </thead>
-        <tbody id="rows"></tbody>
+        <tbody id="rows">
+          <!--TABLE_ROWS-->
+        </tbody>
       </table>
     </main>
-    <script>
-      fetch("/api/metrics?hours=48")
-        .then((r) => r.json())
-        .then((rows) => {
-          const tbody = document.getElementById("rows");
-          if (!rows.length) {
-            tbody.innerHTML =
-              "<tr><td colspan='7'>No rows yet — run setup_continuous_aggregate.sql and refresh.</td></tr>";
-            return;
-          }
-          tbody.innerHTML = rows
-            .map(
-              (r) => `<tr>
-              <td>${r.bucket}</td>
-              <td>${r.sensor_id}</td>
-              <td>${r.metric}</td>
-              <td>${r.sample_count}</td>
-              <td>${r.avg_value?.toFixed(2) ?? "—"}</td>
-              <td>${r.min_value?.toFixed(2) ?? "—"}</td>
-              <td>${r.max_value?.toFixed(2) ?? "—"}</td>
-            </tr>`
-            )
-            .join("");
-        })
-        .catch((e) => {
-          document.getElementById("rows").innerHTML =
-            `<tr><td colspan='7'>${e.message}</td></tr>`;
-        });
-    </script>
   </body>
 </html>
